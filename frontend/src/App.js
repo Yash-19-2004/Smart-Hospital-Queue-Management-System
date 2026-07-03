@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 
+const API_URL ="https://smart-hospital-queue-management-system-1.onrender.com";
+
 function App() {
 
   const [patient, setPatient] = useState("");
@@ -16,7 +18,7 @@ function App() {
   async function fetchData() {
 
     const response = await axios.get(
-      "http://localhost:5000/patients"
+        API_URL + "/patients"
     );
 
     setPatients(response.data);
@@ -39,7 +41,7 @@ function App() {
     }
 
     await axios.post(
-      "http://localhost:5000/patient",
+      API_URL + "/patient",
       {
         patient: patient,
         doctor: doctor,
@@ -61,7 +63,7 @@ function App() {
   async function updateStatus(id, status) {
 
     await axios.put(
-      "http://localhost:5000/patient/" + id,
+      API_URL + "/patient/" + id,
       {
         status: status
       }
@@ -74,8 +76,8 @@ function App() {
   async function deletePatient(id) {
 
     await axios.delete(
-      "http://localhost:5000/patient/" + id
-    );
+      API_URL + "/patient/" + id
+        );
 
     fetchData();
   }
