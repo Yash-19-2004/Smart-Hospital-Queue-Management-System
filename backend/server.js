@@ -1,9 +1,7 @@
-
-// server.js
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
 
@@ -11,14 +9,9 @@ app.use(cors());
 
 app.use(express.json());
 
-
-
-mongoose.connect(
-  "mongodb://localhost:27017/hospitalDB"
-);
-
-
-
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.log(err));
 
 const Patient = mongoose.model("Patient", {
 
@@ -32,10 +25,6 @@ const Patient = mongoose.model("Patient", {
 
 });
 
-
-
-
-// CREATE
 app.post("/patient", async function (req, res) {
 
   const newPatient = new Patient({
@@ -56,10 +45,6 @@ app.post("/patient", async function (req, res) {
 
 });
 
-
-
-
-// GET
 app.get("/patients", async function (req, res) {
 
   const patients = await Patient.find();
@@ -68,10 +53,6 @@ app.get("/patients", async function (req, res) {
 
 });
 
-
-
-
-// UPDATE
 app.put("/patient/:id", async function (req, res) {
 
   await Patient.findByIdAndUpdate(
@@ -90,10 +71,6 @@ app.put("/patient/:id", async function (req, res) {
 
 });
 
-
-
-
-// DELETE
 app.delete("/patient/:id", async function (req, res) {
 
   await Patient.findByIdAndDelete(
@@ -106,10 +83,6 @@ app.delete("/patient/:id", async function (req, res) {
 
 });
 
-
-
-
-// STATS
 app.get("/stats", async function (req, res) {
 
   const patients = await Patient.find();
@@ -146,9 +119,6 @@ app.get("/stats", async function (req, res) {
 
   });
 
-
-
-
   res.json({
 
     total: patients.length,
@@ -163,14 +133,9 @@ app.get("/stats", async function (req, res) {
 
 });
 
+const PORT = process.env.PORT || 5000;
 
-
-
-app.listen(5000, function () {
-
-  console.log(
-    "Server Running On Port 5000"
-  );
-
+app.listen(PORT, function () {
+  console.log(`Server Running On Port ${PORT}`);
 });
 
